@@ -926,6 +926,8 @@ NSMutableDictionary* _dataSourceDict;
 NSMutableDictionary*  _timeObserverIdDict;
 NSMutableDictionary*  _artworkImageDict;
 CacheManager* _cacheManager;
+FLTBetterPlayer* _notificationPlayer;
+bool _remoteCommandsInitialized = false;
 
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
     FlutterMethodChannel* channel =
@@ -976,6 +978,7 @@ CacheManager* _cacheManager;
 }
 
 - (void) setupRemoteNotification :(FLTBetterPlayer*) player{
+    _notificationPlayer = player;
     [self stopOtherUpdateListener:player];
     NSDictionary* dataSource = [_dataSourceDict objectForKey:[self getTextureId:player]];
     BOOL showNotification = false;
@@ -1010,6 +1013,9 @@ CacheManager* _cacheManager;
 
 
 - (void) setupRemoteCommands:(FLTBetterPlayer*)player  {
+    if (_remoteCommandsInitialized){
+        return;
+    }
     MPRemoteCommandCenter *commandCenter = [MPRemoteCommandCenter sharedCommandCenter];
     [commandCenter.togglePlayPauseCommand setEnabled:YES];
     [commandCenter.playCommand setEnabled:YES];
@@ -1021,40 +1027,40 @@ CacheManager* _cacheManager;
     }
     
     [commandCenter.togglePlayPauseCommand addTargetWithHandler: ^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
-        if (![[NSNull null] isEqual:player]) {
-            if (player.isPlaying){
-                player.eventSink(@{@"event" : @"play"});
+        if (![[NSNull null] isEqual:_notificationPlayer]){
+            if (_notificationPlayer.isPlaying){
+                _notificationPlayer.eventSink(@{@"event" : @"play"});
             } else {
-                player.eventSink(@{@"event" : @"pause"});
+                _notificationPlayer.eventSink(@{@"event" : @"pause"});
             }
         }
         return MPRemoteCommandHandlerStatusSuccess;
     }];
     
     [commandCenter.playCommand addTargetWithHandler: ^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
-        if (![[NSNull null] isEqual:player]) {
-            player.eventSink(@{@"event" : @"play"});
+        if (![[NSNull null] isEqual:_notificationPlayer]) {
+            _notificationPlayer.eventSink(@{@"event" : @"play"});
         }
         return MPRemoteCommandHandlerStatusSuccess;
     }];
     
     [commandCenter.pauseCommand addTargetWithHandler: ^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
-        if (![[NSNull null] isEqual:player]) {
-            player.eventSink(@{@"event" : @"pause"});
+        if (![[NSNull null] isEqual:_notificationPlayer]) {
+            _notificationPlayer.eventSink(@{@"event" : @"pause"});
         }
         return MPRemoteCommandHandlerStatusSuccess;
     }];
     
     [commandCenter.previousTrackCommand addTargetWithHandler: ^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
-        if (![[NSNull null] isEqual:player]) {
-            player.eventSink(@{@"event" : @"skipPrevious"});
+        if (![[NSNull null] isEqual:_notificationPlayer]) {
+            _notificationPlayer.eventSink(@{@"event" : @"skipPrevious"});
         }
         return MPRemoteCommandHandlerStatusSuccess;
     }];
 
     [commandCenter.nextTrackCommand addTargetWithHandler: ^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
-        if (![[NSNull null] isEqual:player]) {
-            player.eventSink(@{@"event" : @"skipNext"});
+        if (![[NSNull null] isEqual:_notificationPlayer]) {
+            _notificationPlayer.eventSink(@{@"event" : @"skipNext"});
         }
         return MPRemoteCommandHandlerStatusSuccess;
     }];
@@ -1065,14 +1071,15 @@ CacheManager* _cacheManager;
             MPChangePlaybackPositionCommandEvent * playbackEvent = (MPChangePlaybackRateCommandEvent * ) event;
             CMTime time = CMTimeMake(playbackEvent.positionTime, 1);
             int64_t millis = FLTCMTimeToMillis(time);
-            if (![[NSNull null] isEqual:player]) {
-                [player seekTo: (int) millis];
-                player.eventSink(@{@"event" : @"seek", @"position": @(millis)});
+            if (![[NSNull null] isEqual:_notificationPlayer]) {
+                [_notificationPlayer seekTo: (int) millis];
+                _notificationPlayer.eventSink(@{@"event" : @"seek", @"position": @(millis)});
             }
             return MPRemoteCommandHandlerStatusSuccess;
         }];
         
     }
+    _remoteCommandsInitialized = true;
 }
 
 - (void) setupRemoteCommandNotification:(FLTBetterPlayer*)player, NSString* title, NSString* author , NSString* imageUrl{
@@ -1145,6 +1152,10 @@ CacheManager* _cacheManager;
 
 
 - (void) disposeNotificationData: (FLTBetterPlayer*)player{
+    if (player == _notificationPlayer){
+       _notificationPlayer = NULL;
+       _remoteCommandsInitialized = false;
+   }
     NSString* key =  [self getTextureId:player];
     id _timeObserverId = _timeObserverIdDict[key];
     [_timeObserverIdDict removeObjectForKey: key];
