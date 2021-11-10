@@ -1021,7 +1021,7 @@ CacheManager* _cacheManager;
     }
     
     [commandCenter.togglePlayPauseCommand addTargetWithHandler: ^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
-        if (player != [NSNull null]) {
+        if (![[NSNull null] isEqual:player]) {
             if (player.isPlaying){
                 player.eventSink(@{@"event" : @"play"});
             } else {
@@ -1032,28 +1032,28 @@ CacheManager* _cacheManager;
     }];
     
     [commandCenter.playCommand addTargetWithHandler: ^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
-        if (player != [NSNull null]) {
+        if (![[NSNull null] isEqual:player]) {
             player.eventSink(@{@"event" : @"play"});
         }
         return MPRemoteCommandHandlerStatusSuccess;
     }];
     
     [commandCenter.pauseCommand addTargetWithHandler: ^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
-        if (player != [NSNull null]) {
+        if (![[NSNull null] isEqual:player]) {
             player.eventSink(@{@"event" : @"pause"});
         }
         return MPRemoteCommandHandlerStatusSuccess;
     }];
     
     [commandCenter.previousTrackCommand addTargetWithHandler: ^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
-        if (player != [NSNull null]) {
+        if (![[NSNull null] isEqual:player]) {
             player.eventSink(@{@"event" : @"skipPrevious"});
         }
         return MPRemoteCommandHandlerStatusSuccess;
     }];
 
     [commandCenter.nextTrackCommand addTargetWithHandler: ^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
-        if (player != [NSNull null]) {
+        if (![[NSNull null] isEqual:player]) {
             player.eventSink(@{@"event" : @"skipNext"});
         }
         return MPRemoteCommandHandlerStatusSuccess;
@@ -1065,7 +1065,7 @@ CacheManager* _cacheManager;
             MPChangePlaybackPositionCommandEvent * playbackEvent = (MPChangePlaybackRateCommandEvent * ) event;
             CMTime time = CMTimeMake(playbackEvent.positionTime, 1);
             int64_t millis = FLTCMTimeToMillis(time);
-            if (player != [NSNull null]) {
+            if (![[NSNull null] isEqual:player]) {
                 [player seekTo: millis];
                 player.eventSink(@{@"event" : @"seek", @"position": @(millis)});
             }
@@ -1087,11 +1087,11 @@ CacheManager* _cacheManager;
                                                   MPNowPlayingInfoPropertyPlaybackRate: @1,
     } mutableCopy];
     
-    if (imageUrl != [NSNull null]){
+    if (![[NSNull null] isEqual:imageUrl]){
         NSString* key =  [self getTextureId:player];
         MPMediaItemArtwork* artworkImage = [_artworkImageDict objectForKey:key];
         
-        if (key != [NSNull null]){
+        if (![[NSNull null] isEqual:key]){
             if (artworkImage){
                 [nowPlayingInfoDict setObject:artworkImage forKey:MPMediaItemPropertyArtwork];
                 [MPNowPlayingInfoCenter defaultCenter].nowPlayingInfo = nowPlayingInfoDict;
