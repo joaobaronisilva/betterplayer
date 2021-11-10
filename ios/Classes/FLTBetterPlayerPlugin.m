@@ -315,8 +315,10 @@ static inline CGFloat radiansToDegrees(CGFloat radians) {
         item = [AVPlayerItem playerItemWithAsset:asset];
     }
     
-    if (@available(iOS 10.0, *) && overriddenDuration > 0) {
-        item.forwardPlaybackEndTime = CMTimeMake(overriddenDuration/1000, 1);
+    if (@available(iOS 10.0, *)) {
+        if (overriddenDuration > 0) {
+            item.forwardPlaybackEndTime = CMTimeMake(overriddenDuration/1000, 1);
+        }
     }
     
     return [self setDataSourcePlayerItem:item withKey:key];
@@ -470,7 +472,7 @@ static inline CGFloat radiansToDegrees(CGFloat radians) {
         switch (item.status) {
             case AVPlayerItemStatusFailed:
                 NSLog(@"Failed to load video:");
-                NSLog(item.error.debugDescription);
+                NSLog(@"%@", item.error.debugDescription);
                 
                 if (_eventSink != nil) {
                     _eventSink([FlutterError
@@ -792,7 +794,7 @@ static inline CGFloat radiansToDegrees(CGFloat radians) {
         NSArray *metaDatas = [AVMetadataItem metadataItemsFromArray:option.commonMetadata withKey:@"title" keySpace:@"comn"];
         if (metaDatas.count > 0) {
             NSString *title = ((AVMetadataItem*)[metaDatas objectAtIndex:0]).stringValue;
-            if (title == name && index == index ){
+            if (title == name){
                 [[_player currentItem] selectMediaOption:option inMediaSelectionGroup: audioSelectionGroup];
             }
         }
@@ -821,8 +823,8 @@ static inline CGFloat radiansToDegrees(CGFloat radians) {
     if (_prevBuffer) {
         CVPixelBufferLockBaseAddress(_prevBuffer, 0);
         
-        int bufferWidth = CVPixelBufferGetWidth(_prevBuffer);
-        int bufferHeight = CVPixelBufferGetHeight(_prevBuffer);
+        int bufferWidth = (int) CVPixelBufferGetWidth(_prevBuffer);
+        int bufferHeight = (int) CVPixelBufferGetHeight(_prevBuffer);
         unsigned char* pixel = (unsigned char*)CVPixelBufferGetBaseAddress(_prevBuffer);
         
         for (int row = 0; row < bufferHeight; row++) {
@@ -897,7 +899,7 @@ static inline CGFloat radiansToDegrees(CGFloat radians) {
         [_displayLink invalidate];
     }
     @catch(NSException *exception) {
-        NSLog(exception.debugDescription);
+        NSLog(@"%@", exception.debugDescription);
     }
 }
 
