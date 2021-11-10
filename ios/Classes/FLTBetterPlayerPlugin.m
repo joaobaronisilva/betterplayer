@@ -1066,7 +1066,7 @@ CacheManager* _cacheManager;
             CMTime time = CMTimeMake(playbackEvent.positionTime, 1);
             int64_t millis = FLTCMTimeToMillis(time);
             if (![[NSNull null] isEqual:player]) {
-                [player seekTo: millis];
+                [player seekTo: (int) millis];
                 player.eventSink(@{@"event" : @"seek", @"position": @(millis)});
             }
             return MPRemoteCommandHandlerStatusSuccess;
