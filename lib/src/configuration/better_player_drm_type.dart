@@ -3,4 +3,3 @@
 ///widevine -> supported only for Android
 ///clearKey -> supported only for Android
 enum BetterPlayerDrmType { token, widevine, clearKey }
-

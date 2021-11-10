@@ -58,7 +58,6 @@ class _BasenotePlayerPageState extends State<BasenotePlayerPage> {
       ),
     ));
 
-
     _queue.add(BetterPlayerDataSource(
       BetterPlayerDataSourceType.network,
       "https://videodelivery.net/59b3abe0bcb40bd27bbba1d3646a0c8c/manifest/video.m3u8",
