@@ -2,6 +2,13 @@
 <img src="https://raw.githubusercontent.com/jhomlala/betterplayer/master/media/logo.png">
 </p>
 
+Swarm Media's fork of BetterPlayer. You are welcome to use this code, but we have made no effort to support use cases outside of ours.
+
+- better_player >63 has an issue rendering blur shadows on iOS. This is caused by iOS platform view, that is used for DRM. Since we don't currently need DRM, our fork reverts this.
+- Fixes compatibility with long HLS URLs (like Cloudflare Stream's).
+- Enables the skipNext and skipPrev iOS notification controls, and bubbles these events back up to the client.
+- Allows the client of the library to control the aspect ratio at the Widget level.
+
 # Better Player
 [![pub package](https://img.shields.io/pub/v/better_player.svg)](https://pub.dartlang.org/packages/better_player)
 [![pub package](https://img.shields.io/github/license/jhomlala/betterplayer.svg?style=flat)](https://github.com/jhomlala/betterplayer)
