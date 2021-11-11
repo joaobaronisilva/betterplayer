@@ -669,14 +669,13 @@ internal class BetterPlayer(
      */
     fun setupMediaSession(context: Context?, setupControlDispatcher: Boolean): MediaSessionCompat {
         mediaSession?.release()
-        val mediaButtonReceiver = ComponentName(context!!, MediaButtonReceiver::class.java)
         val mediaButtonIntent = Intent(Intent.ACTION_MEDIA_BUTTON)
         val pendingIntent = PendingIntent.getBroadcast(
             context!!,
             0, mediaButtonIntent,
             PendingIntent.FLAG_IMMUTABLE
         )
-        val mediaSession = MediaSessionCompat(context!!, TAG, null, pendingIntent)
+        val mediaSession = MediaSessionCompat(context, TAG, null, pendingIntent)
         mediaSession.setCallback(object : MediaSessionCompat.Callback() {
             override fun onSeekTo(pos: Long) {
                 sendSeekToEvent(pos)
