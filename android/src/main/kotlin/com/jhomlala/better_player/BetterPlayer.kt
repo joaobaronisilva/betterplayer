@@ -304,9 +304,8 @@ internal class BetterPlayer(
         playerNotificationManager = PlayerNotificationManager.Builder(
             context,
             NOTIFICATION_ID,
-            playerNotificationChannelName!!,
-            mediaDescriptionAdapter
-        ).build()
+            playerNotificationChannelName!!
+        ).setMediaDescriptionAdapter(mediaDescriptionAdapter).build()
         playerNotificationManager!!.setPlayer(exoPlayer)
         playerNotificationManager!!.setUseNextAction(false)
         playerNotificationManager!!.setUsePreviousAction(false)
