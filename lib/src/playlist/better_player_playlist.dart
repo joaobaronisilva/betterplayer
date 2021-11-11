@@ -1,7 +1,6 @@
 import 'package:better_player/better_player.dart';
 import 'package:better_player/src/configuration/better_player_configuration.dart';
 import 'package:better_player/src/configuration/better_player_data_source.dart';
-import 'package:better_player/src/core/better_player_utils.dart';
 import 'package:better_player/src/playlist/better_player_playlist_configuration.dart';
 import 'package:better_player/src/playlist/better_player_playlist_controller.dart';
 
@@ -48,12 +47,8 @@ class BetterPlayerPlaylistState extends State<BetterPlayerPlaylist> {
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
-      aspectRatio: _betterPlayerController!.getAspectRatio() ??
-          BetterPlayerUtils.calculateAspectRatio(context),
-      child: BetterPlayer(
-        controller: _betterPlayerController!,
-      ),
+    return BetterPlayer(
+      controller: _betterPlayerController!,
     );
   }
 
