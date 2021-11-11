@@ -2,7 +2,9 @@ PODS:
   - better_player (0.0.1):
     - Cache (~> 6.0.0)
     - Flutter
-    - HLSCachingReverseProxyServer
+    - GCDWebServer (~> 3.5.4)
+    - HLSCachingReverseProxyServer (~> 0.2.0)
+    - PINCache (~> 3.0.3)
   - Cache (6.0.0)
   - Flutter (1.0.0)
   - GCDWebServer (3.5.4):
@@ -57,7 +59,7 @@ CHECKOUT OPTIONS:
     :git: https://github.com/SwarmMedia/HLSCachingReverseProxyServer.git
 
 SPEC CHECKSUMS:
-  better_player: 5f77b030c433bd39af0aaaffc184cf4267601a84
+  better_player: f27053f574fa88065ff59704f88b6e977f76f38a
   Cache: 4ca7e00363fca5455f26534e5607634c820ffc2d
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   GCDWebServer: 2c156a56c8226e2d5c0c3f208a3621ccffbe3ce4

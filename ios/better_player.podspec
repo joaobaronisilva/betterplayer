@@ -16,7 +16,9 @@ A new flutter plugin project.
   s.public_header_files = 'Classes/**/*.h'
   s.dependency 'Flutter'
   s.dependency 'Cache', '~> 6.0.0'
-  s.dependency 'HLSCachingReverseProxyServer'
+  s.dependency 'HLSCachingReverseProxyServer', '~> 0.2.0'
+  s.dependency 'PINCache', '~> 3.0.3'
+  s.dependency 'GCDWebServer', '~> 3.5.4'
 
   s.platform = :ios, '11.0'
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'VALID_ARCHS[sdk=iphonesimulator*]' => 'x86_64' }
