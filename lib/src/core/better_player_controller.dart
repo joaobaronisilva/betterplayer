@@ -1,19 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:better_player/better_player.dart';
-import 'package:better_player/src/asms/better_player_asms_audio_track.dart';
-import 'package:better_player/src/asms/better_player_asms_data_holder.dart';
-import 'package:better_player/src/asms/better_player_asms_subtitle.dart';
-import 'package:better_player/src/asms/better_player_asms_track.dart';
-import 'package:better_player/src/asms/better_player_asms_utils.dart';
-import 'package:better_player/src/configuration/better_player_configuration.dart';
 import 'package:better_player/src/configuration/better_player_controller_event.dart';
-import 'package:better_player/src/configuration/better_player_drm_type.dart';
-import 'package:better_player/src/configuration/better_player_event.dart';
-import 'package:better_player/src/configuration/better_player_event_type.dart';
-import 'package:better_player/src/configuration/better_player_translations.dart';
-import 'package:better_player/src/configuration/better_player_video_format.dart';
-import 'package:better_player/src/core/better_player_controller_provider.dart';
 import 'package:better_player/src/core/better_player_utils.dart';
 import 'package:better_player/src/subtitles/better_player_subtitle.dart';
 import 'package:better_player/src/subtitles/better_player_subtitles_factory.dart';
@@ -146,10 +134,6 @@ class BetterPlayerController {
   ///Flag which determines if controls (UI interface) is shown. When false,
   ///UI won't be shown (show only player surface).
   bool get controlsEnabled => _controlsEnabled;
-
-  ///Overridden aspect ratio which will be used instead of aspect ratio passed
-  ///in configuration.
-  double? _overriddenAspectRatio;
 
   ///Was Picture in Picture opened.
   bool _wasInPipMode = false;
@@ -1024,19 +1008,6 @@ class BetterPlayerController {
         pause();
       }
     }
-  }
-
-  // ignore: use_setters_to_change_properties
-  ///Setup overridden aspect ratio.
-  void setOverriddenAspectRatio(double aspectRatio) {
-    _overriddenAspectRatio = aspectRatio;
-  }
-
-  ///Get aspect ratio used in current video. If aspect ratio is null, then
-  ///aspect ratio from BetterPlayerConfiguration will be used. Otherwise
-  ///[_overriddenAspectRatio] will be used.
-  double? getAspectRatio() {
-    return _overriddenAspectRatio ?? betterPlayerConfiguration.aspectRatio;
   }
 
   ///Enable Picture in Picture (PiP) mode. [betterPlayerGlobalKey] is required
